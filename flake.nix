@@ -3,9 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    k0s-flake.url = "github:vivekanandan-ks/ksv-k0s-nix-package";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, k0s-flake }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -35,7 +36,10 @@
               }
             ];
 
-            environment.systemPackages = with pkgs; [ btop ];
+            environment.systemPackages = with pkgs; [ 
+              btop
+              k0s-flake.packages.${system}.default
+              ];
             system.stateVersion = "24.11";
           })
         ];
